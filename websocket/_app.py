@@ -91,14 +91,14 @@ class WebSocketApp(object):
         self.url = url
         self.header = header if header is not None else []
         self.cookie = cookie
-        self.on_open = on_open
-        self.on_message = on_message
-        self.on_data = on_data
-        self.on_error = on_error
-        self.on_close = on_close
-        self.on_ping = on_ping
-        self.on_pong = on_pong
-        self.on_cont_message = on_cont_message
+        self.on_open = on_open or self.on_open
+        self.on_message = on_message or self.on_message
+        self.on_data = on_data or self.on_data
+        self.on_error = on_error or self.on_error
+        self.on_close = on_close or self.on_close
+        self.on_ping = on_ping or self.on_ping
+        self.on_pong = on_pong or self.on_pong
+        self.on_cont_message = on_cont_message or self.on_cont_message
         self.keep_running = keep_running
         self.get_mask_key = get_mask_key
         self.sock = None
@@ -238,6 +238,32 @@ class WebSocketApp(object):
                 close_frame.data if close_frame else None)
             self._callback(self.on_close, *close_args)
             self.sock = None
+
+    # High-level callbacks
+    def on_open(self):
+        """Handle the connection being opened."""
+
+    def on_message(self, message):
+        """Handle an incoming message."""
+
+    def on_error(self, exc):
+        """Handle a WebSocket error."""
+
+    def on_close(self, code, reason):
+        """Handle the connection being closed."""
+
+    # Low-level callbacks
+    def on_data(self, data, opcode, fin):
+        """Handle data being received."""
+
+    def on_ping(self, data):
+        """Handle an incoming ping."""
+
+    def on_pong(self, data):
+        """Handle an incoming pong."""
+
+    def on_cont_message(self, data, opcode, fin):
+        """Handle incoming continued frame data."""
 
     def _get_close_args(self, data):
         """ this functions extracts the code, reason from the close body
