@@ -55,10 +55,12 @@ __all__ = [
 @enum.unique
 class CloseStatus(enum.IntEnum):
     """Enumeration representing status codes when closing a connection."""
+    # 0-999: Reserved and not used
     NORMAL = 1000
     GOING_AWAY = 1001
     PROTOCOL_ERROR = 1002
     UNSUPPORTED_DATA_TYPE = 1003
+    # 1004: Reserved
     NOT_AVAILABLE = 1005
     ABNORMAL_CLOSED = 1006
     INVALID_PAYLOAD = 1007
@@ -66,7 +68,14 @@ class CloseStatus(enum.IntEnum):
     MESSAGE_TOO_BIG = 1009
     INVALID_EXTENSION = 1010
     UNEXPECTED_CONDITION = 1011
+    SERVICE_RESTART = 1012
+    TRY_AGAIN_LATER = 1013
+    # 1014: Reserved for future use by the WebSocket standard
     TLS_HANDSHAKE_ERROR = 1015
+    # 1016-1999: Reserved for future use by the WebSocket standard
+    # 2000-2999: Reserved for use by WebSocket extensions
+    # 3000-3999: Available for use by libraries and frameworks
+    # 4000-4999: Available for use by applications
 
 VALID_CLOSE_STATUS = (
     CloseStatus.NORMAL,
