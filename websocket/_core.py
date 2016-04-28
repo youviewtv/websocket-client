@@ -356,11 +356,11 @@ class WebSocket(object):
         """
         return self.frame_buffer.recv_frame()
 
-    def send_close(self, status=STATUS_NORMAL, reason=six.b("")):
+    def send_close(self, status=CloseStatus.NORMAL, reason=six.b("")):
         """
         send close data to the server.
 
-        status: status code to send. see STATUS_XXX.
+        status: status code to send. see CloseStatus.
 
         reason: the reason to close. This must be string or bytes.
         """
@@ -369,11 +369,11 @@ class WebSocket(object):
         self.connected = False
         self.send(struct.pack('!H', status) + reason, ABNF.OPCODE_CLOSE)
 
-    def close(self, status=STATUS_NORMAL, reason=six.b(""), timeout=3):
+    def close(self, status=CloseStatus.NORMAL, reason=six.b(""), timeout=3):
         """
         Close Websocket object
 
-        status: status code to send. see STATUS_XXX.
+        status: status code to send. see CloseStatus.
 
         reason: the reason to close. This must be string.
 
@@ -394,7 +394,7 @@ class WebSocket(object):
                     frame = self.recv_frame()
                     if isEnabledForError():
                         recv_status = struct.unpack("!H", frame.data)[0]
-                        if recv_status != STATUS_NORMAL:
+                        if recv_status != CloseStatus.NORMAL:
                             error("close status: " + repr(recv_status))
                 except:
                     pass

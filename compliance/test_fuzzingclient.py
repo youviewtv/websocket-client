@@ -16,7 +16,7 @@ ws.close()
 
 for case in range(1, count+1):
     url = SERVER + '/runCase?case={0}&agent={1}'.format(case, AGENT)
-    status = websocket.STATUS_NORMAL
+    status = websocket.CloseStatus.NORMAL
     try:
         ws = websocket.create_connection(url)
         while True:
@@ -27,13 +27,13 @@ for case in range(1, count+1):
                 ws.send(msg, opcode)
     except UnicodeDecodeError:
         # this case is ok.
-        status = websocket.STATUS_PROTOCOL_ERROR
+        status = websocket.CloseStatus.PROTOCOL_ERROR
     except websocket.WebSocketProtocolException:
-        status = websocket.STATUS_PROTOCOL_ERROR
+        status = websocket.CloseStatus.PROTOCOL_ERROR
     except websocket.WebSocketPayloadException:
-        status = websocket.STATUS_INVALID_PAYLOAD
+        status = websocket.CloseStatus.INVALID_PAYLOAD
     except Exception as e:
-        # status = websocket.STATUS_PROTOCOL_ERROR
+        # status = websocket.CloseStatus.PROTOCOL_ERROR
         print(traceback.format_exc())
     finally:
         ws.close(status)

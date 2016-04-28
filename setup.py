@@ -13,6 +13,11 @@ if sys.version_info[0] == 2:
         tests_require.append('unittest2==0.8.0')
         install_requires.append('argparse')
 
+try:
+    import enum
+except ImportError:
+    install_requires.append("enum34")
+
 setup(
     name=NAME,
     version=VERSION,
