@@ -28,6 +28,7 @@ import sys
 import threading
 import time
 import traceback
+import types
 
 import six
 
@@ -285,11 +286,14 @@ class WebSocketApp(object):
         return [None, None]
 
     def _callback(self, callback, *args):
-        if callback:
-            try:
-                callback(self, *args)
-            except Exception as e:
-                error("error from callback {}: {}".format(callback, e))
-                if isEnabledForDebug():
-                    _, _, tb = sys.exc_info()
-                    traceback.print_tb(tb)
+        # A function passed into the constructor needs the instance prepended to
+        # the args list; an overridden method doesn't need this.
+        if isinstance(callback, types.FunctionType):
+            args = (self,) + args
+        try:
+            callback(*args)
+        except Exception as e:
+            error("error from callback {}: {}".format(callback, e))
+            if isEnabledForDebug():
+                _, _, tb = sys.exc_info()
+                traceback.print_tb(tb)
